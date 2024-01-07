@@ -51,7 +51,7 @@
                 messageElement.classList.add("operator-message");
             }
 
-            messageElement.innerHTML = "<p>" + message.content + "</p>";
+            messageElement.innerHTML = "<pre>" + message.content + "</pre>";
             document.getElementById("chat-messages").appendChild(messageElement);
         }
     });
@@ -61,7 +61,7 @@
         let userMessage = document.createElement("div");
         userMessage.classList.add("chat-message");
         userMessage.classList.add("user-message");
-        userMessage.innerHTML = "<p>" + userInput + "</p>";
+        userMessage.innerHTML = "<pre>" + userInput + "</pre>";
         document.getElementById("chat-messages").appendChild(userMessage);
         document.getElementById("user-input").value = "";
 
@@ -83,12 +83,12 @@
         responseMessage.classList.add("operator-message");
 
         if (!response) {
-            responseMessage.innerHTML = "<p>Sorry, I didn't understand that.</p>";
+            responseMessage.innerHTML = "<pre>Sorry, I didn't understand that.</pre>";
             document.getElementById("chat-messages").appendChild(responseMessage);
             return;
         }
 
-        responseMessage.innerHTML = "<p>" + response.content + "</p>";
+        responseMessage.innerHTML = "<pre>" + response.content + "</pre>";
 
         document.getElementById("chat-messages").appendChild(responseMessage);
 
