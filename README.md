@@ -4,7 +4,7 @@ This project is an attempt at preventing a "$1 chevy sale incident", by using tw
 
 ## Demo
 
-![Demo Video](demo/antijailbreakchatbot-nosound.mp4)
+https://github.com/CADawg/AntiJailbreakChatbot/assets/28988626/05fb255d-fb23-44af-bb47-1aba9e5fcec1
 
 ## How to use
 
