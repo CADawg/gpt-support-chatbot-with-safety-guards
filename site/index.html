@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<!-- source code from configdn (c) 2023 dBuidl Limited - LICENCE AGPL 3.0 -->
+<div id="app"><div class="page"><nav class="navbar"><div class="navbar-brand"><div class="navbar-logo"></div></div><div class="navbar-links"></div></nav></div></div>
+<!-- end of configdn source -->
+
+<div id="chat-panel">
+    <div id="chat-panel-relative">
+        <div id="chat-header">
+            <img src="https://robohash.org/chatgpt.png" alt="ChatGPT" />
+            <div>
+                <h2>ChatGPT</h2>
+                <p>Anything said below is not legally binding, this is just a project for fun and demo purposes.</p>
+            </div>
+        </div>
+        <div id="chat-messages">
+            <div class="chat-message operator-message">
+                <p>Hi, how can I help you today?</p>
+            </div>
+        </div>
+        <div id="user-input-area">
+            <input aria-label="Type a message..." type="text" placeholder="Type a message..." id="user-input">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // load messages on page load
+    window.addEventListener("load", async function() {
+        let messages = await fetch("/chat_state");
+        messages = await messages.json();
+
+        if (!messages) return;
+
+        for (let i = 0; i < messages.length; i++) {
+            let message = messages[i];
+            let messageElement = document.createElement("div");
+            messageElement.classList.add("chat-message");
+
+            if (message.role === "user") {
+                messageElement.classList.add("user-message");
+            } else {
+                messageElement.classList.add("operator-message");
+            }
+
+            messageElement.innerHTML = "<p>" + message.content + "</p>";
+            document.getElementById("chat-messages").appendChild(messageElement);
+        }
+    });
+
+    document.getElementById("send-button").addEventListener("click", async function() {
+        let userInput = document.getElementById("user-input").value;
+        let userMessage = document.createElement("div");
+        userMessage.classList.add("chat-message");
+        userMessage.classList.add("user-message");
+        userMessage.innerHTML = "<p>" + userInput + "</p>";
+        document.getElementById("chat-messages").appendChild(userMessage);
+        document.getElementById("user-input").value = "";
+
+        let response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: userInput
+            })
+        });
+
+        response = await response.json();
+
+        let responseMessage = document.createElement("div");
+
+        responseMessage.classList.add("chat-message");
+        responseMessage.classList.add("operator-message");
+
+        if (!response) {
+            responseMessage.innerHTML = "<p>Sorry, I didn't understand that.</p>";
+            document.getElementById("chat-messages").appendChild(responseMessage);
+            return;
+        }
+
+        responseMessage.innerHTML = "<p>" + response.content + "</p>";
+
+        document.getElementById("chat-messages").appendChild(responseMessage);
+
+        document.getElementById("chat-messages").scrollTop = document.getElementById("chat-messages").scrollHeight;
+    });
+</script>
+</body>
+</html>
